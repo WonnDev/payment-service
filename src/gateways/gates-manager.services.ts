@@ -64,7 +64,10 @@ export class GatesManagerService implements OnApplicationBootstrap {
   stopAllCron() {
     this.gates.forEach((gate) => gate.stopCron());
     setTimeout(() => {
-      this.gates.forEach((gate) => gate.startCron());
+      this.startAllCron();
     }, 5 * 60000);
+  }
+  startAllCron() {
+    this.gates.forEach((gate) => gate.startCron());
   }
 }

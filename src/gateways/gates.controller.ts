@@ -2,7 +2,7 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { GatesManagerService } from './gates-manager.services';
 import * as moment from 'moment-timezone';
 import { OnEvent } from '@nestjs/event-emitter';
-import { GATEWAY_STOP_CRON } from 'src/shards/events';
+import { GATEWAY_START_CRON, GATEWAY_STOP_CRON } from 'src/shards/events';
 
 @Controller('gateways')
 export class GatesController {
@@ -26,5 +26,10 @@ export class GatesController {
   @OnEvent(GATEWAY_STOP_CRON)
   stopGateCron() {
     this.gateManagerService.stopAllCron();
+  }
+
+  @OnEvent(GATEWAY_START_CRON)
+  startGateCron() {
+    this.gateManagerService.startAllCron();
   }
 }

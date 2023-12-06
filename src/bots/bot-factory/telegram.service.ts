@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import * as moment from 'moment-timezone';
 import { Format3Dot } from 'src/shards/helpers/format3Dot';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { GATEWAY_STOP_CRON } from 'src/shards/events';
+import { GATEWAY_START_CRON, GATEWAY_STOP_CRON } from 'src/shards/events';
 @Injectable()
 export class TelegramBot extends Bot {
   private readonly bot: TelegramBotSDK;
@@ -32,6 +32,13 @@ export class TelegramBot extends Bot {
       ) {
         this.eventEmitter.emit(GATEWAY_STOP_CRON);
         this.bot.sendMessage(chatId, `Stop cron job in 5m`);
+      }
+      if (
+        msg.text.startsWith('/startCron') &&
+        this.botConfig.admin_ids?.includes(userId)
+      ) {
+        this.eventEmitter.emit(GATEWAY_START_CRON);
+        this.bot.sendMessage(chatId, `Start cron`);
       }
     });
   }
