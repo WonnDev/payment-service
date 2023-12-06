@@ -23,6 +23,5 @@ export class DiscordBot extends Bot {
         content: message,
       },
     );
-    throw new Error('Method not implemented.');
   }
 }

@@ -32,7 +32,7 @@ export abstract class Bot {
     const worker = new Worker(
       `bot-${this.botConfig.type}`,
       async (job: Job<Payment>) => {
-        this.sendMessage(job.data);
+        await this.sendMessage(job.data);
       },
       { connection: this.configService.get('redis'), concurrency: 5 },
     );
