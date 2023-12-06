@@ -6,6 +6,7 @@ import * as Joi from 'joi';
 import { BotFactory } from './bot-factory/bot.factory';
 import { Bot } from './bot.service';
 import { Payment } from 'src/gateways/gate.interface';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class BotManagerService implements OnApplicationBootstrap {
@@ -16,6 +17,7 @@ export class BotManagerService implements OnApplicationBootstrap {
     private readonly paymentConfigService: PaymentConfigService,
     protected readonly configService: ConfigService,
     private readonly botFactory: BotFactory,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
   async onApplicationBootstrap() {
     const botsConfig = await this.paymentConfigService.getConfigPath<BotConfig>(
@@ -36,6 +38,7 @@ export class BotManagerService implements OnApplicationBootstrap {
         content_regex: Joi.string().required(),
         account_regex: Joi.string().required(),
       },
+      admin_ids: Joi.array().items(Joi.string()),
     });
 
     for (const botConfig of botsConfig) {
@@ -48,7 +51,7 @@ export class BotManagerService implements OnApplicationBootstrap {
 
   createBots(botsConfig: BotConfig[]) {
     this.bots = botsConfig.map((botConfig) =>
-      this.botFactory.create(botConfig, this.configService),
+      this.botFactory.create(botConfig, this.configService, this.eventEmitter),
     );
   }
 

@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { Job, Queue, Worker } from 'bullmq';
 import { Payment } from 'src/gateways/gate.interface';
 import { CheckPaymentConditions } from 'src/shards/helpers/checkPaymentCondition';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export abstract class Bot {
@@ -12,8 +13,9 @@ export abstract class Bot {
   private readonly queue: Queue<Payment>;
 
   constructor(
-    protected botConfig: BotConfig,
+    protected readonly botConfig: BotConfig,
     protected readonly configService: ConfigService,
+    protected readonly eventEmitter: EventEmitter2,
   ) {
     this.queue = new Queue(`bot-${this.botConfig.type}`, {
       connection: this.configService.get('redis'),

@@ -6,6 +6,10 @@ bots:
     conditions:
       content_regex: '.*?'
       account_regex: '.*?'
+    # only support in telegram
+    # admin_ids can use /stopCron command
+    admin_ids:
+      - '5877655134'
   caythueelo_discord_bot:
     type: 'DISCORD'
     token: '--'

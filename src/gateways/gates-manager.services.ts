@@ -1,4 +1,8 @@
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  OnApplicationBootstrap,
+} from '@nestjs/common';
 import { PaymentConfigService } from 'src/payment-config/payment-config.services';
 import { GateFactory } from './gateway-factory/gate.factory';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -50,9 +54,17 @@ export class GatesManagerService implements OnApplicationBootstrap {
 
   stopCron(name: string, timeInSec: number) {
     const gate = this.gates.find((gate) => gate.getName() === name);
+    if (!gate) throw new NotFoundException({ error: 'Gate not found' });
+
     gate.stopCron();
     setTimeout(() => {
       gate.startCron();
     }, timeInSec * 1000);
+  }
+  stopAllCron() {
+    this.gates.forEach((gate) => gate.stopCron());
+    setTimeout(() => {
+      this.gates.forEach((gate) => gate.startCron());
+    }, 5 * 60000);
   }
 }

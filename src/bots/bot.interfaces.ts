@@ -11,4 +11,5 @@ export interface BotConfig {
     content_regex: string;
     account_regex: string;
   };
+  admin_ids?: string[];
 }
