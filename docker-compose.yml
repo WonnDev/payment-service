@@ -1,0 +1,21 @@
+version: '3'
+volumes:
+  redis-data:
+    driver: local
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./config/config.yml:/app/config/config.yml
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - redis
+    env_file:
+      - .env
+  redis:
+    image: redis:6.2-alpine
+    volumes:
+      - redis-data:/data
