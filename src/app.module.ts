@@ -8,6 +8,7 @@ import { WebhookModule } from './webhook/webhook.module';
 import configuration from './configuration';
 import { BotModule } from './bots/bots.module';
 import { queueUIMiddleware } from './shards/middlewares/queues.middleware';
+import { CaptchaSolverModule } from './captcha-solver/captcha-solver.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { queueUIMiddleware } from './shards/middlewares/queues.middleware';
           .valid('development', 'production')
           .default('development'),
         PORT: Joi.number().default(3000),
+        CAPTCHA_API_BASE_URL: Joi.string().required(),
         REDIS_HOST: Joi.string().required(),
         REDIS_PORT: Joi.number().required(),
       }),
@@ -28,6 +30,7 @@ import { queueUIMiddleware } from './shards/middlewares/queues.middleware';
     PaymentsModule,
     WebhookModule,
     BotModule,
+    CaptchaSolverModule,
   ],
   providers: [],
 })
