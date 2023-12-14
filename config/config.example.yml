@@ -30,11 +30,11 @@ gateways:
     type: 'MBBANK'
     password: '--'
     account: '456'
-    token: '`'
+    login_id: 'abc'
     repeat_interval_in_sec: 10
   abc_bank_1:
     type: 'ACBBANK'
     password: '--'
     account: '123'
-    token: '`'
+    login_id: 'abc'
     repeat_interval_in_sec: 10
