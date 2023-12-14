@@ -33,8 +33,12 @@
     "joi": "^17.11.0",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
+    "node-html-parser": "^6.1.11",
     "node-telegram-bot-api": "^0.64.0",
+    "playwright": "^1.40.1",
     "reflect-metadata": "^0.1.13",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
     "rxjs": "^7.8.1",
     "yaml": "^2.3.4"
   },

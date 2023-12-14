@@ -4,9 +4,7 @@ volumes:
     driver: local
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: registry.gitlab.com/nhayhoc/payment-service
     volumes:
       - ./config/config.yml:/app/config/config.yml
     ports:
@@ -25,3 +23,6 @@ services:
       - redis-data:/data
   captcha-resolver:
     image: registry.gitlab.com/nhayhoc/bank-captcha-server
+
+# docker build -t registry.gitlab.com/nhayhoc/payment-service .
+# docker push registry.gitlab.com/nhayhoc/payment-service

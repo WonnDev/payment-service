@@ -4,3 +4,8 @@ node_modules
 *.md
 dist
 config
+Dockerfile
+docker-compose.*
+.env
+.env*
+.gitlab-cli.yml
