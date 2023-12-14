@@ -15,6 +15,7 @@ export interface GateConfig {
   name: string;
   type: GateType;
   password?: string;
+  login_id?: string;
   account: string;
   token: string;
   repeat_interval_in_sec: number;

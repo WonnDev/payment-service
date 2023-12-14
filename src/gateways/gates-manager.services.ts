@@ -9,6 +9,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Gate } from 'src/gateways/gates.services';
 import { GateConfig, GateType } from './gate.interface';
 import * as Joi from 'joi';
+import { CaptchaSolverService } from 'src/captcha-solver/captcha-solver.service';
 
 @Injectable()
 export class GatesManagerService implements OnApplicationBootstrap {
@@ -18,6 +19,7 @@ export class GatesManagerService implements OnApplicationBootstrap {
     private readonly paymentConfigService: PaymentConfigService,
     private readonly gateFactory: GateFactory,
     private eventEmitter: EventEmitter2,
+    private readonly captchaSolverService: CaptchaSolverService,
   ) {}
 
   async onApplicationBootstrap() {
@@ -30,7 +32,11 @@ export class GatesManagerService implements OnApplicationBootstrap {
 
   createGates(banksConfig: GateConfig[]) {
     this.gates = banksConfig.map((bankConfig) =>
-      this.gateFactory.create(bankConfig, this.eventEmitter),
+      this.gateFactory.create(
+        bankConfig,
+        this.eventEmitter,
+        this.captchaSolverService,
+      ),
     );
   }
 
@@ -40,7 +46,12 @@ export class GatesManagerService implements OnApplicationBootstrap {
       type: Joi.valid(...Object.values(GateType)).required(),
       repeat_interval_in_sec: Joi.number().min(10).max(120).required(),
       password: Joi.string().required(),
-      token: Joi.string().required(),
+      // login_id required if type is ACBBank
+      login_id: Joi.string().when('type', {
+        is: [GateType.ACBBANK, GateType.MBBANK],
+        then: Joi.required(),
+      }),
+      token: Joi.string(),
       account: Joi.string().required(),
     });
 
