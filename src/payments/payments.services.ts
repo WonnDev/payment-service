@@ -19,7 +19,10 @@ export class PaymentService implements OnApplicationBootstrap {
   async onApplicationBootstrap() {
     const payments = await this.redis.get('payments');
     if (payments) {
-      this.payments = JSON.parse(payments);
+      this.payments = JSON.parse(payments).map((el) => ({
+        ...el,
+        date: new Date(el.date),
+      }));
     }
   }
 
@@ -41,7 +44,9 @@ export class PaymentService implements OnApplicationBootstrap {
 
     this.payments.push(...newPayments);
 
-    this.payments = this.payments.slice(-500);
+    this.payments = this.payments
+      .slice(-500)
+      .sort((a, b) => b.date.getTime() - a.date.getTime());
     this.saveRedis();
   }
 
