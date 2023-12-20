@@ -8,7 +8,11 @@ export function CheckPaymentConditions(
   },
 ) {
   const { content_regex, account_regex } = condition;
-  const isMatchContent = !!payment.content.match(content_regex);
-  const isMatchAccount = !!payment.account_receiver.match(account_regex);
+  const isMatchContent = !!payment.content.match(
+    new RegExp(content_regex, 'gmi'),
+  );
+  const isMatchAccount = !!payment.account_receiver.match(
+    new RegExp(account_regex, 'gmi'),
+  );
   return isMatchContent && isMatchAccount;
 }
